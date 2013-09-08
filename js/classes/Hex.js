@@ -1,4 +1,4 @@
-define(['Class', 'RegularPolygon'], function (Class, RegularPolygon) {
+define(['Class', 'RegularPolygon', 'Board'], function (Class, RegularPolygon, Board) {
 					 
 	return Class.extend({
 		/**
@@ -15,7 +15,7 @@ define(['Class', 'RegularPolygon'], function (Class, RegularPolygon) {
 			this.ctx = this.canvas.getContext('2d');
 			
 			this.modules = {
-				regularPolygon: new RegularPolygon(this.width / 2, this.height / 2, 50, 6)
+				board: new Board(width, height)
 			};
 			
 			requestAnimationFrame(this.animate.bind(this));
@@ -24,18 +24,13 @@ define(['Class', 'RegularPolygon'], function (Class, RegularPolygon) {
 		 * @method update - updates the login
 		 */
 		update: function () {
-			this.modules.regularPolygon.update();
 		},
 		/**
 		 * @method draw - draws to the canvas
 		 */
 		draw: function () {
 			this.ctx.clearRect(0, 0, this.width, this.height);
-			
-			this.ctx.beginPath();
-			this.modules.regularPolygon.draw(this.ctx);
-			this.ctx.closePath();
-			this.ctx.fill();
+			this.modules.board.draw(this.ctx);
 		},
 		/**
 		 * @method animate - a loop triggered when the browser is ready for another frame
