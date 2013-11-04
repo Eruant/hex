@@ -29,12 +29,11 @@ define(['Class'], function (Class) {
       return { x: xPosition, y: yPosition };
     },
 
+    update: function () {
+      
+    },
+
     draw: function (ctx) {
-      ctx.save();
-      ctx.translate(xPosition, yPosition);
-      ctx.strokeStyle = 'rgb(0, 255, 0)';
-      ctx.strokeRect(-16, -16, 32, 32);
-      ctx.restore();
     }
   });
 });

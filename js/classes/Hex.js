@@ -1,4 +1,4 @@
-define(['Class', 'RegularPolygon', 'Board', 'Pointer', 'HexCalc'], function (Class, RegularPolygon, Board, Pointer, HexCalc) {
+define(['Class', 'RegularPolygon', 'Board', 'Pointer', 'HexCalc', 'Players'], function (Class, RegularPolygon, Board, Pointer, HexCalc, Players) {
 
   var selectedTileX = 0,
     selectedTileY = 0;
@@ -20,7 +20,8 @@ define(['Class', 'RegularPolygon', 'Board', 'Pointer', 'HexCalc'], function (Cla
 			this.modules = {
 				board: new Board(width, height),
         pointer: new Pointer(this.canvas),
-        hexCalc: new HexCalc()
+        hexCalc: new HexCalc(),
+        players: new Players()
 			};
 
 			requestAnimationFrame(this.animate.bind(this));
@@ -37,6 +38,11 @@ define(['Class', 'RegularPolygon', 'Board', 'Pointer', 'HexCalc'], function (Cla
         r = (1 / 3 * Math.sqrt(3) * y - 1 / 3 * x) / size,
         axialObj = this.modules.hexCalc.axialToCube({ q:q, r:r }),
         cubeObj = this.modules.hexCalc.hexRound(axialObj);
+
+      if (selectedTileX !== cubeObj.x || selectedTileY !== cubeObj.y) {
+        // new turn see which player clicked and if the move is allowed
+				console.log('new turn');
+      }
       
       selectedTileX = cubeObj.x;
       selectedTileY = cubeObj.y;
