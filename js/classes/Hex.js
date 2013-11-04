@@ -1,4 +1,7 @@
-define(['Class', 'RegularPolygon', 'Board'], function (Class, RegularPolygon, Board) {
+define(['Class', 'RegularPolygon', 'Board', 'Pointer', 'HexCalc'], function (Class, RegularPolygon, Board, Pointer, HexCalc) {
+
+  var selectedTileX = 0,
+    selectedTileY = 0;
 					 
 	return Class.extend({
 		/**
@@ -15,22 +18,35 @@ define(['Class', 'RegularPolygon', 'Board'], function (Class, RegularPolygon, Bo
 			this.ctx = this.canvas.getContext('2d');
 			
 			this.modules = {
-				board: new Board(width, height)
+				board: new Board(width, height),
+        pointer: new Pointer(this.canvas),
+        hexCalc: new HexCalc()
 			};
-			
+
 			requestAnimationFrame(this.animate.bind(this));
 		},
 		/**
 		 * @method update - updates the login
 		 */
 		update: function () {
+      var pointerPosition = this.modules.pointer.getPosition(),
+        size = this.modules.board.tileSize,
+        x = pointerPosition.x - this.modules.board.cameraX,
+        y = -(pointerPosition.y - this.modules.board.cameraY),
+        q = 2 / 3 * x / size;
+        r = (1 / 3 * Math.sqrt(3) * y - 1 / 3 * x) / size,
+        axialObj = this.modules.hexCalc.axialToCube({ q:q, r:r }),
+        cubeObj = this.modules.hexCalc.hexRound(axialObj);
+      
+      selectedTileX = cubeObj.x;
+      selectedTileY = cubeObj.y;
 		},
 		/**
 		 * @method draw - draws to the canvas
 		 */
 		draw: function () {
 			this.ctx.clearRect(0, 0, this.width, this.height);
-			this.modules.board.draw(this.ctx);
+			this.modules.board.draw(this.ctx, selectedTileX, selectedTileY);
 		},
 		/**
 		 * @method animate - a loop triggered when the browser is ready for another frame

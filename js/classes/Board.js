@@ -15,7 +15,7 @@ define(['Class', 'Level', 'RegularPolygon'], function (Class, Level, RegularPoly
 			this.regPoly = new RegularPolygon();
 		},
 		
-		draw: function(ctx) {
+		draw: function(ctx, selectedTileX, selectedTileY) {
 			
 			var tiles = this.level.current,
 				len = tiles.length,
@@ -31,13 +31,22 @@ define(['Class', 'Level', 'RegularPolygon'], function (Class, Level, RegularPoly
 				x = tile[0] * ((this.tileSize / 2) * 3);
 				y = (tile[1] * (Math.sqrt(3) / 2) * (this.tileSize * 2)) + ((tile[0] * (Math.sqrt(3) / 2) * (this.tileSize * 2)) / 2);
 				
+        ctx.fillStyle = '#fff';
+        if (tile[0] === selectedTileX && tile[1] === selectedTileY) {
+          ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        }
 				this.regPoly.drawPolygon(ctx, x, y, this.tileSize);
+        ctx.fill();
 				ctx.textAlign = 'center';
 				ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#000';
 				ctx.fillText(tile[0] + ':' + tile[1], x, y);
 				ctx.stroke();
+
 			}
+
 			ctx.restore();
+
 		}
 	});
 });
